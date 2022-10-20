@@ -16,8 +16,12 @@ function target () {
 function createSymlink () {
   local source=$(readlink -f $1)
   local target=$(target $1)
-  echo "Creating symlink... $source -> $target"
-  ln -s "$source" "$target"
+  if [[ "$(readlink $target)" != "$source" ]] { 
+    echo "Creating symlink... $source -> $target"
+    ln -s "$source" "$target"
+  } else {
+    echo "'$target' has already installed, skipping..."
+  }
 }
 
 echo ">> Installing top-level dotfiles..."
