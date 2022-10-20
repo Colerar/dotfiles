@@ -1,0 +1,8 @@
+.idea
+.vscode
+
+*.private
+.DS_Store
+
+dots/.config/nvim/plugged
+dots/.config/nvim/swapfiles

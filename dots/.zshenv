@@ -1,0 +1,2 @@
+skip_global_compinit=1
+SHELL_SESSIONS_DISABLE=1

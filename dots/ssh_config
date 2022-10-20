@@ -1,0 +1,16 @@
+# This file would not be auto-installed, it is not started with a dot 
+# because ssh config may contain secrets, so here is just a template.
+#
+# You can install it to ~/.ssh/config manually.
+#
+# The config below can resolve the SSH disconnect issue,
+# and it is for general purposes, so under 'Host *'.
+Host *
+    ForwardAgent yes
+    ServerAliveInterval 30
+    ServerAliveCountMax 20
+    TCPKeepAlive no
+    ControlMaster auto
+    ControlPath ~/.ssh/connections-%r@%h:%p
+    ControlPersist 4h
+    Compression yes
