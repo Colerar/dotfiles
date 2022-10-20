@@ -1,0 +1,27 @@
+# Music.app
+
+ctrl + cmd + alt - up    : osascript -l JavaScript -e \
+                         " \
+                         var app = Application('Music'); \
+                         var volume = app.soundVolume(); \
+                         app.soundVolume = volume + 10 < 100 ? volume + 10 : 100; \
+                         "
+ 
+ctrl + cmd + alt - down  : osascript -l JavaScript -e \
+                         " \
+                         var app = Application('Music'); \
+                         var volume = app.soundVolume(); \
+                         app.soundVolume = volume - 10 > 0 ? volume - 10 : 0; \
+                         "
+
+ctrl + cmd + alt - right : osascript -l JavaScript -e "Application('Music').nextTrack();"
+
+ctrl + cmd + alt - left  : osascript -l JavaScript -e "Application('Music').previousTrack();"
+
+ctrl + cmd + alt - p     : osascript -l JavaScript -e "Application('Music').playpause();"
+
+# Yabai
+
+ctrl - right             : yabai -m space --focus next
+ 
+ctrl - left              : yabai -m space --focus prev
