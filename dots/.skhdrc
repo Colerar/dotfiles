@@ -8,7 +8,7 @@ ctrl + cmd + alt - up    : osascript -l JavaScript -e \
                          var volume = app.soundVolume(); \
                          app.soundVolume = volume + 10 < 100 ? volume + 10 : 100; \
                          "
- 
+
 ctrl + cmd + alt - down  : osascript -l JavaScript -e \
                          " \
                          var app = Application('Music'); \
