@@ -29,38 +29,38 @@ ctrl + cmd + alt - p     : osascript -l JavaScript -e "Application('Music').play
 # Override macOS default space switch shortcut
 # this way without animation
 
-ctrl - right             : yabai -m space --focus next
+# ctrl - right             : yabai -m space --focus next
  
-ctrl - left              : yabai -m space --focus prev
+# ctrl - left              : yabai -m space --focus prev
 
-ctrl - 1                 : yabai -m space --focus 1
-ctrl - 2                 : yabai -m space --focus 2
-ctrl - 3                 : yabai -m space --focus 3
-ctrl - 4                 : yabai -m space --focus 4
-ctrl - 5                 : yabai -m space --focus 5
+# ctrl - 1                 : yabai -m space --focus 1
+# ctrl - 2                 : yabai -m space --focus 2
+# ctrl - 3                 : yabai -m space --focus 3
+# ctrl - 4                 : yabai -m space --focus 4
+# ctrl - 5                 : yabai -m space --focus 5
 
-# Rectangle-like shortcuts:
+# # Rectangle-like shortcuts:
 
-# Left Half
-ctrl + alt - left        : yabai -m window --grid 1:2:0:0:1:2
+# # Left Half
+# ctrl + alt - left        : yabai -m window --grid 1:2:0:0:1:2
 
-# Right Half
-ctrl + alt - right       : yabai -m window --grid 1:2:1:0:1:2
+# # Right Half
+# ctrl + alt - right       : yabai -m window --grid 1:2:1:0:1:2
 
-# Top Left 1/4
-ctrl + alt - u           : yabai -m window --grid 2:2:0:0:1:1
+# # Top Left 1/4
+# ctrl + alt - u           : yabai -m window --grid 2:2:0:0:1:1
 
-# Top Right 1/4
-ctrl + alt - i           : yabai -m window --grid 2:2:1:0:1:1
+# # Top Right 1/4
+# ctrl + alt - i           : yabai -m window --grid 2:2:1:0:1:1
 
-# Bottom Left 1/4
-ctrl + alt - j           : yabai -m window --grid 2:2:0:1:1:1
+# # Bottom Left 1/4
+# ctrl + alt - j           : yabai -m window --grid 2:2:0:1:1:1
 
-# Bottom Right 1/4
-ctrl + alt - k           : yabai -m window --grid 2:2:1:1:1:1
+# # Bottom Right 1/4
+# ctrl + alt - k           : yabai -m window --grid 2:2:1:1:1:1
 
-# Fill Screen
-ctrl + alt - return      : yabai -m window --grid 1:1:0:0:1:1
+# # Fill Screen
+# ctrl + alt - return      : yabai -m window --grid 1:1:0:0:1:1
 
-# Center on Screen
-ctrl + alt - c           : yabai -m window --grid 4:4:1:1:2:2
+# # Center on Screen
+# ctrl + alt - c           : yabai -m window --grid 4:4:1:1:2:2

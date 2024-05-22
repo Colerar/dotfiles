@@ -21,10 +21,6 @@ fi
 
 ZI[OPTIMIZE_OUT_DISK_ACCESSES]=1 # slightly faster
 
-# Timezone
-
-export TZ=America/Chicago
-
 ## history setting
 setopt SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_EXPIRE_DUPS_FIRST HIST_IGNORE_DUPS HIST_IGNORE_SPACE HIST_SAVE_NO_DUPS INC_APPEND_HISTORY
 
@@ -33,11 +29,7 @@ HISTSIZE=3000
 SAVEHIST=10000
 
 ## pushd and other
-setopt AUTO_PUSHD AUTO_CD AUTO_LIST AUTO_LIST PUSHD_IGNORE_DUPS INTERACTIVE_COMMENTS
-
-## LS color, defined esp. for cd color
-export CLICOLOR=1
-export LSCOLORS=ExGxFxdaCxDaDahbadeche
+setopt AUTO_PUSHD AUTO_CD AUTO_LIST AUTO_LIST PUSHD_IGNORE_DUPS INTERACTIVE_COMMENTS 
 
 ## completion settings - pretty print - ignore case
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
@@ -67,15 +59,17 @@ export EDITOR=nvim
 # CPM, see: https://github.com/cpm-cmake
 export CPM_SOURCE_CACHE="$HOME/.cache/CPM"
 
-export XWIN_ARCH="x86_64"
 export XWIN_CACHE_DIR="$HOME/Downloads/.xwin-cache"
 
 ## Brew
 export HOMEBREW_NO_ANALYTICS="true"
-export HOMEBREW_NO_ENV_HINTS="true"
 
 ## faster startup, but less safer
 export ZSH_DISABLE_COMPFIX="true"
+
+## LS color, defined esp. for cd color, 'cause exa has its own setting
+export CLICOLOR=1
+export LSCOLORS=ExGxFxdaCxDaDahbadeche
 
 ## needs Secretive installed - https://github.com/maxgoedjen/secretive
 export SSH_AUTH_SOCK="$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
@@ -89,56 +83,29 @@ if [[ -f "$HOME/.zi/is_intel" || $(sysctl -n machdep.cpu.brand_string) = *Intel*
 }
 
 #LLVM_HOME="/Users/col/Downloads/llvm"
-export LLVM_HOME="/usr/local/opt/llvm"
-# export LLVM_HOME="/usr/local/opt/llvm@16"
+export LLVM_HOME="$BREW_PREFIX/opt/llvm"
 #export LLVM_HOME=/Users/col/Developer/rust/build/x86_64-apple-darwin/llvm
 export LLVM_SYS_150_PREFIX="$BREW_PREFIX/opt/llvm@15"
 
-
-# FUCK PYTHON
-__venv_pattern='/venv/bin/python'
-if [[ "$PATH" != *_"$testseq"_* ]]; then
-
-export PATH="$BREW_PREFIX/opt/python@3.12/libexec/bin:$PATH"
-
-fi
-
 ## brew install ruby
-# export PATH="$BREW_PREFIX/opt/ruby/bin:$PATH"
-
-## self builded ruby
-export PATH="$HOME/.rubies/ruby-3.2.2/bin:$PATH"
-export RUBY="$HOME/.rubies/ruby-3.2.2/bin/ruby"
-
-export PATH="$HOME/Downloads/.sui:$PATH"
-
-## brew install bison
-export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"
-
-## ghostscript
-export PATH="$BREW_PREFIX/opt/ghostscript/bin:$PATH"
+export PATH="$BREW_PREFIX/opt/ruby/bin:$PATH"
 
 export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=x86_64-linux-gnu-gcc
 export CC_x86_64_unknown_linux_gnu=x86_64-linux-gnu-gcc
 export CXX_x86_64_unknown_linux_gnu=x86_64-linux-gnu-g++
 export AR_x86_64_unknown_linux_gnu=x86_64-linux-gnu-ar
 
-export CMAKE_C_COMPILER_LAUNCHER=sccache
-export CMAKE_CXX_COMPILER_LAUNCHER=sccache
-
-export PKG_CONFIG_PATH="$BREW_PREFIX/opt/icu4c/lib/pkgconfig/:$PKG_CONFIG_PATH"
-export PATH="$BREW_PREFIX/opt/icu4c/bin:$PATH"
-export PATH="$BREW_PREFIX/opt/icu4c/sbin:$PATH"
-
-export PATH="$BREW_PREFIX/opt/postgresql@15/bin:$PATH"
-
-export ICU_ROOT="$BREW_PREFIX/opt/icu4c/"
-
 # brew install llvm
 if [[ -d "$LLVM_HOME" ]] {
   export PATH="$LLVM_HOME/bin:$PATH"
   export CC="$LLVM_HOME/bin/clang"
   export CXX="$LLVM_HOME/bin/clang++"
+}
+
+if [[ -d "$BREW_PREFIX/opt/ccache/libexec" ]] {
+  export PATH="$BREW_PREFIX/opt/ccache/libexec:$PATH"
+  export CC="$BREW_PREFIX/opt/ccache/libexec/clang"
+  export CXX="$BREW_PREFIX/opt/ccache/libexec/clang++"
 }
 
 ## brew install openssl
@@ -187,6 +154,8 @@ if [[ "$OSTYPE" = *darwin* ]] {
 zi ice depth'1' atload"[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh" nocd
 zi light romkatv/powerlevel10k
 
+# eval "$(starship init zsh)"
+
 zi wait lucid light-mode depth"1" for \
   blockf has'lsd' \
     "https://gist.githubusercontent.com/Colerar/18fdd01a4231760545542c31835a09a6/raw/zsh-lsd-aliases.sh" \
@@ -194,23 +163,21 @@ zi wait lucid light-mode depth"1" for \
     z-shell/F-Sy-H \
   atload"_zsh_autosuggest_start;" \
     zsh-users/zsh-autosuggestions \
-  multisrc="*.zsh" pick"/dev/null" \
+  multisrc="{directories,functions}.zsh" pick"/dev/null" \
     Colerar/omz-extracted \
   blockf has'zoxide' \
     https://gist.githubusercontent.com/Colerar/ff82d2c9c6211da846b20df146cfa272/raw/zoxide.zsh \
-  blockf has'git' atload'export GPG_TTY=$(tty)' pick="lib/git.zsh" \
-    ohmyzsh/ohmyzsh \
-  blockf has'git' pick="plugins/git/git.plugin.zsh" \
-    ohmyzsh/ohmyzsh \
-  blockf has'pbcopy' pick="plugins/macos/macos.plugin.zsh" \
-    ohmyzsh/ohmyzsh \
-  blockf has'code' pick="plugins/vscode/vscode.plugin.zsh" \
-    ohmyzsh/ohmyzsh \
+  blockf has'git' atload'export GPG_TTY=$(tty)' \
+    OMZL::git.zsh \
+    OMZP::git \
+  svn blockf has'pbcopy' \
+    https://github.com/ohmyzsh/ohmyzsh/trunk/plugins/macos \
+  blockf has'code' \
+    OMZP::vscode \
   blockf has'asdf' \
     https://gist.githubusercontent.com/Colerar/0280581a4c7e0fd949d475f48ad779cf/raw/asdf.zsh \
   z-shell/zzcomplete \
-  blockf has'sudo' pick="plugins/sudo/sudo.plugin.zsh" \
-    ohmyzsh/ohmyzsh \
+  OMZP::sudo
 
 zi wait'1' lucid light-mode depth"1" for \
   as'completion' \
@@ -219,8 +186,8 @@ zi wait'1' lucid light-mode depth"1" for \
     zsh-users/zsh-completions \
   as'completion' blockf has'cargo' \
     https://raw.githubusercontent.com/rust-lang/cargo/master/src/etc/_cargo \
-  blockf has'yarn' pick="plugins/yarn/yarn.plugin.zsh" \
-    ohmyzsh/ohmyzsh \
+  blockf has'yarn' \
+    OMZP::yarn \
   atload'
         export znt_history_active_text="reverse"
         export znt_list_colorpair="white/24"
@@ -241,13 +208,12 @@ zi wait'1' lucid light-mode depth"1" for \
     srijanshetty/zsh-pandoc-completion \
   as'completion' \
     /Users/col/.sdkman/contrib/completion/bash/sdk \
-  blockf has'brew' pick="plugins/brew/brew.plugin.zsh" \
-    ohmyzsh/ohmyzsh \
-  blockf has'gradle' pick="plugins/gradle/gradle.plugin.zsh" \
-    ohmyzsh/ohmyzsh \
+  blockf has'brew' \
+    OMZP::brew \
+  blockf has'gradle' \
+    OMZP::gradle \
   "https://gist.githubusercontent.com/Colerar/2f23c76583ac7866a50cda5bb04ff3a4/raw/sha-alias.plugin.zsh" \
-  blockf pick="plugins/extract/extract.plugin.zsh" \
-    ohmyzsh/ohmyzsh \
+  OMZP::extract
 
 ## jenv
 ## brew install jenv
@@ -270,38 +236,26 @@ jenv() {
   esac
 }
 
-update-nodejs () {
-  asdf plugin-update nodejs
-  local _latest="$(asdf nodejs resolve lts --latest-available)"
-  local _latest_installed="$(asdf nodejs resolve lts --latest-installed)"
-  if [[ "$_latest" != "$_latest_installed" ]] {
-    asdf install nodejs "$_latest"
-  }
-  asdf global nodejs "$_latest"
-  asdf reshim nodejs
-  asdf current nodejs
-}
-
-update-jenvs () {
-  eval "$(jenv init -)"
-  local readonly jenv_global="$(jenv global)"
-  local _brew_prefix="$(brew --prefix)"
-  /bin/rm -rf "$HOME/.jenv"
-  mkdir -p "$HOME/.jenv/versions"
-  for _path in $(fd '^.+jdk([@-]?\d{1,2})?$' "$_brew_prefix/opt/"); do
-    _filename=$_path:t
-    for _jdkpath in $(fd '.+\.jdk' "$_path/libexec/"); do
-      sudo ln -sfn "$_jdkpath" "/Library/Java/JavaVirtualMachines/$_filename.jdk"
-    ; done
-  ; done
-  fd --type directory --regex '.*\.jdk' /Library/Java/JavaVirtualMachines -x jenv add '{}/Contents/Home'
-  fd --type symlink --regex '.*\.jdk' /Library/Java/JavaVirtualMachines -x jenv add '{}/Contents/Home'
-  fd -t=file --glob '*zulu*.pkg' "${_brew_prefix}/Caskroom/" -X rm -rf '{}'
-  jenv rehash
-  jenv global "$jenv_global"
-}
-
 # Alias
+
+rm! () {
+  /bin/rm "$@"
+}
+
+rm () {
+  echo "Moving to ~/.Trash: ["
+  for i in "$@"; do 
+    echo "  $i"
+  done
+  echo "]"
+  /bin/mv -f $@ ~/.trash/
+}
+
+alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
+
+emptytrash () {
+  sudo /bin/rm -rf ~/.trash/*
+}
 
 alias -s gz='tar -xzvf'
 alias -s tgz='tar -xzvf'
@@ -323,25 +277,7 @@ alias ffmpeg="ffmpeg ${__FFMPEG_ARGS}"
 alias ffprobe="ffprobe ${__FFMPEG_ARGS}"
 alias ffplay="ffplay ${__FFMPEG_ARGS}"
 
-rm! () {
-  /bin/rm "$@"
-}
-
-rm () {
-  echo "Moving to ~/.Trash: ["
-  for i in "$@"; do 
-    echo "  $i"
-  done
-  echo "]"
-  /bin/mv -f $@ ~/.trash/
-}
-
-alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
-
-emptytrash () {
-  sudo /bin/rm -rf ~/.trash/*
-}
-
+alias add_jenvs="fd --type directory --regex '.*\.jdk' /Library/Java/JavaVirtualMachines -x jenv add '{}/Contents/Home'"
 
 alias lctl="launchctl"
 
@@ -351,7 +287,6 @@ alias 2hex="hexdump -ve '1/1 \"0x%.2x, \"' && echo"
 
 # git clone shallow
 alias gcls="git clone --depth 1 --recurse-submodules --shallow-submodules"
-alias gclnoblob="git clone --filter=blob:none"
 alias gcfnobody="git config user.name 'Nobody' && git config user.email 'nobody@example.com'"
 
 # Key Bindings
@@ -372,6 +307,3 @@ if [[ "$VSCODE_INJECTION" -ne 1 ]] {
 bindkey -s "^B" "zo^m"
 bindkey -s "^W" "btm --expanded^M"
 }
-
-# opam configuration
-[[ ! -r /Users/col/.opam/opam-init/init.zsh ]] || source /Users/col/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
