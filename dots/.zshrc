@@ -92,16 +92,10 @@ if [[ -f "$HOME/.zi/is_intel" || $(sysctl -n machdep.cpu.brand_string) = *Intel*
 export LLVM_HOME="/usr/local/opt/llvm"
 # export LLVM_HOME="/usr/local/opt/llvm@16"
 #export LLVM_HOME=/Users/col/Developer/rust/build/x86_64-apple-darwin/llvm
-export LLVM_SYS_150_PREFIX="$BREW_PREFIX/opt/llvm@15"
+# export LLVM_SYS_150_PREFIX="$BREW_PREFIX/opt/llvm@15"
 
 
-# FUCK PYTHON
-__venv_pattern='/venv/bin/python'
-if [[ "$PATH" != *_"$testseq"_* ]]; then
-
-export PATH="$BREW_PREFIX/opt/python@3.12/libexec/bin:$PATH"
-
-fi
+export PATH="/Applications/Wine Crossover.app/Contents/Resources/start/bin:/Applications/Wine Crossover.app/Contents/Resources/wine/bin:$PATH"
 
 ## brew install ruby
 # export PATH="$BREW_PREFIX/opt/ruby/bin:$PATH"
