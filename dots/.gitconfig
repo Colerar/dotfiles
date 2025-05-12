@@ -7,7 +7,7 @@
 [core]
     autocrlf = input
     pager = delta
-	excludesfile = /Users/col/.gitignore.global
+	excludesfile = ~/.gitignore.global
 [init]
 	defaultBranch = main
 [sequence]
@@ -31,15 +31,8 @@
     line-numbers = true
 [url "git@github.com:"]
     insteadOf = https://github.com/
-[url "https://github.com/rust-lang/crates.io-index"]
-    insteadOf = https://github.com/rust-lang/crates.io-index
 [fetch]
 	parallel = 0 # Automatically select a sensible value
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-[blame]
-	ignoreRevsFile = .git-blame-ignore-revs

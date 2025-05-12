@@ -3,4 +3,4 @@
 
 skip_global_compinit=1
 SHELL_SESSIONS_DISABLE=1
-. "$HOME/.cargo/env"
+[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"

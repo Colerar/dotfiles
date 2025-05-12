@@ -1,3 +1,7 @@
+if [[ -d "/Applications/Secretive.app" ]] {
+  export SSH_AUTH_SOCK="$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
+}
+
 # ZI
 if [[ ! -f $HOME/.zi/bin/zi.zsh ]] {
   print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
@@ -23,7 +27,7 @@ ZI[OPTIMIZE_OUT_DISK_ACCESSES]=1 # slightly faster
 
 # Timezone
 
-export TZ=America/Chicago
+# export TZ=America/Chicago
 
 ## history setting
 setopt SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_EXPIRE_DUPS_FIRST HIST_IGNORE_DUPS HIST_IGNORE_SPACE HIST_SAVE_NO_DUPS INC_APPEND_HISTORY
@@ -62,7 +66,7 @@ zstyle ':completion:*' menu select
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
 
 # exports
-export EDITOR=nvim
+export EDITOR=hx
 
 # CPM, see: https://github.com/cpm-cmake
 export CPM_SOURCE_CACHE="$HOME/.cache/CPM"
@@ -77,19 +81,21 @@ export HOMEBREW_NO_ENV_HINTS="true"
 ## faster startup, but less safer
 export ZSH_DISABLE_COMPFIX="true"
 
-## needs Secretive installed - https://github.com/maxgoedjen/secretive
-export SSH_AUTH_SOCK="$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
-
 export LANG=en_US.UTF-8
 
 local BREW_PREFIX="/opt/homebrew"
 if [[ -f "$HOME/.zi/is_intel" || $(sysctl -n machdep.cpu.brand_string) = *Intel* ]] {
   touch "$HOME/.zi/is_intel"
   local BREW_PREFIX="/usr/local"
+} else {
+  export PATH="/opt/homebrew/bin:$PATH"
 }
 
+export WINEPREFIX="$HOME/.wine"
+export ROSETTA_ADVERTISE_AVX=1
+
 #LLVM_HOME="/Users/col/Downloads/llvm"
-export LLVM_HOME="/usr/local/opt/llvm"
+export LLVM_HOME="$BREW_PREFIX/opt/llvm"
 # export LLVM_HOME="/usr/local/opt/llvm@16"
 #export LLVM_HOME=/Users/col/Developer/rust/build/x86_64-apple-darwin/llvm
 # export LLVM_SYS_150_PREFIX="$BREW_PREFIX/opt/llvm@15"
@@ -99,18 +105,6 @@ export PATH="/Applications/Wine Crossover.app/Contents/Resources/start/bin:/Appl
 
 ## brew install ruby
 # export PATH="$BREW_PREFIX/opt/ruby/bin:$PATH"
-
-## self builded ruby
-export PATH="$HOME/.rubies/ruby-3.2.2/bin:$PATH"
-export RUBY="$HOME/.rubies/ruby-3.2.2/bin/ruby"
-
-export PATH="$HOME/Downloads/.sui:$PATH"
-
-## brew install bison
-export PATH="$BREW_PREFIX/opt/bison/bin:$PATH"
-
-## ghostscript
-export PATH="$BREW_PREFIX/opt/ghostscript/bin:$PATH"
 
 export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=x86_64-linux-gnu-gcc
 export CC_x86_64_unknown_linux_gnu=x86_64-linux-gnu-gcc
@@ -286,13 +280,21 @@ update-jenvs () {
     _filename=$_path:t
     for _jdkpath in $(fd '.+\.jdk' "$_path/libexec/"); do
       sudo ln -sfn "$_jdkpath" "/Library/Java/JavaVirtualMachines/$_filename.jdk"
-    ; done
-  ; done
-  fd --type directory --regex '.*\.jdk' /Library/Java/JavaVirtualMachines -x jenv add '{}/Contents/Home'
-  fd --type symlink --regex '.*\.jdk' /Library/Java/JavaVirtualMachines -x jenv add '{}/Contents/Home'
-  fd -t=file --glob '*zulu*.pkg' "${_brew_prefix}/Caskroom/" -X rm -rf '{}'
+    done
+  done
+  fd --type directory --regex '.*\.jdk' /Library/Java/JavaVirtualMachines -j1 -x jenv add '{}/Contents/Home'
+  fd --type symlink --regex '.*\.jdk' /Library/Java/JavaVirtualMachines -j1 -x jenv add '{}/Contents/Home'
+  if [[ -d "$HOME/Applications/IntelliJ IDEA Ultimate.app/Contents/jbr/Contents/Home" ]] {
+    jenv add "$HOME/Applications/IntelliJ IDEA Ultimate.app/Contents/jbr/Contents/Home"
+  }
+  fd -t=file --glob '*zulu*.pkg' "${_brew_prefix}/Caskroom/" -X /bin/rm -rf '{}'
   jenv rehash
   jenv global "$jenv_global"
+}
+
+if [[ -d "/Applications/iTerm.app" ]] {
+  alias iterm="open -a iTerm ."
+  alias iterm2="open -a iTerm ."
 }
 
 # Alias
@@ -347,6 +349,17 @@ alias 2hex="hexdump -ve '1/1 \"0x%.2x, \"' && echo"
 alias gcls="git clone --depth 1 --recurse-submodules --shallow-submodules"
 alias gclnoblob="git clone --filter=blob:none"
 alias gcfnobody="git config user.name 'Nobody' && git config user.email 'nobody@example.com'"
+alias gsunoblob="git submodule update --init --recursive --filter=blob:none"
+gpsupr() {
+  if [ -z "$1" ] && echo "Usage: gpsupr <remote-name>" && return 1
+  local current_branch="$(git rev-parse --abbrev-ref HEAD)"
+  if [ -z "$current_branch" ] || [ "$current_branch" = "HEAD" ]; then
+    echo "Error: Could not determine the current branch, or you are in a detached HEAD state."
+    echo "Please ensure you are on a branch: git checkout <branch-name>"
+    return 1
+  fi
+  git push --set-upstream "$1" "$current_branch"
+}
 
 # Key Bindings
 
